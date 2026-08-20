@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes | Panel Claudette</title>
+  <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body class="body-admin">
+
+  <!-- ===== HEADER ADMIN (igual en todas las paginas del panel) ===== -->
+  <header class="header-admin">
+    <span class="logo-admin">Claudette</span>
+
+    <nav class="nav-admin">
+      <ul>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="clientes.html">Clientes</a></li>
+        <li><a href="login.html">Cerrar sesion</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== CONTENIDO ===== -->
+  <main class="main-admin">
+
+    <section class="admin-encabezado">
+      <h1>Clientes</h1>
+    </section>
+
+    <!-- Buscador -->
+    <section class="admin-filtros">
+
+      <form class="formulario-filtros" action="#" method="get">
+
+        <div class="campo">
+          <label for="buscar">Buscar</label>
+          <input type="search" id="buscar" name="buscar" placeholder="Nombre, email o telefono">
+        </div>
+
+        <button class="boton-secundario" type="submit">Buscar</button>
+
+      </form>
+
+    </section>
+
+    
+    <section class="admin-tabla">
+
+      <table class="tabla-clientes">
+
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Telefono</th>
+            <th>Localidad</th>
+            <th>Compras</th>
+            <th>Ultima compra</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          
+          <tr data-id="1">
+            <td>Maria Gomez</td>
+            <td>maria@ejemplo.com</td>
+            <td>381 555-0001</td>
+            <td>San Miguel de Tucuman</td>
+            <td>3</td>
+            <td>12/08/2026</td>
+            <td class="acciones">
+              <a href="#">Ver detalle</a>
+            </td>
+          </tr>
+
+          <tr data-id="2">
+            <td>Lucia Fernandez</td>
+            <td>lucia@ejemplo.com</td>
+            <td>381 555-0002</td>
+            <td>Yerba Buena</td>
+            <td>1</td>
+            <td>05/08/2026</td>
+            <td class="acciones">
+              <a href="#">Ver detalle</a>
+            </td>
+          </tr>
+
+          <tr data-id="3">
+            <td>Sofia Diaz</td>
+            <td>sofia@ejemplo.com</td>
+            <td>381 555-0003</td>
+            <td>Tafi Viejo</td>
+            <td>7</td>
+            <td>18/08/2026</td>
+            <td class="acciones">
+              <a href="#">Ver detalle</a>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+    
+    <nav class="paginacion">
+      <a href="#">Anterior</a>
+      <a href="#">1</a>
+      <a href="#">2</a>
+      <a href="#">Siguiente</a>
+    </nav>
+
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos | Panel Claudette</title>
+  <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body class="body-admin">
+
+  
+  <header class="header-admin">
+    <span class="logo-admin">Claudette</span>
+
+    <nav class="nav-admin">
+      <ul>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="clientes.html">Clientes</a></li>
+        <li><a href="login.html">Cerrar sesion</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  
+  <main class="main-admin">
+
+    <section class="admin-encabezado">
+      <h1>Productos</h1>
+      <a class="boton-primario" href="producto-form.html">Agregar producto</a>
+    </section>
+
+    
+    <section class="admin-filtros">
+
+      <form class="formulario-filtros" action="#" method="get">
+
+        <div class="campo">
+          <label for="buscar">Buscar</label>
+          <input type="search" id="buscar" name="buscar" placeholder="Nombre del producto">
+        </div>
+
+        <div class="campo">
+          <label for="categoria">Categoria</label>
+          <select id="categoria" name="categoria">
+            <option value="">Todas</option>
+            <option value="remeras">Remeras</option>
+            <option value="pantalones">Pantalones</option>
+            <option value="vestidos">Vestidos</option>
+            <option value="abrigos">Abrigos</option>
+            <option value="accesorios">Accesorios</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="estado">Estado</label>
+          <select id="estado" name="estado">
+            <option value="">Todos</option>
+            <option value="activo">Publicado</option>
+            <option value="inactivo">Sin publicar</option>
+            <option value="sin-stock">Sin stock</option>
+          </select>
+        </div>
+
+        <button class="boton-secundario" type="submit">Filtrar</button>
+
+      </form>
+
+    </section>
+
+    <!-- Tabla de productos -->
+    <section class="admin-tabla">
+
+      <table class="tabla-productos">
+
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Categoria</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- Fila de ejemplo. Se repite una por producto. -->
+          <tr data-id="1">
+            <td><img src="../img/productos/ejemplo.jpg" alt="Vestido floreado"></td>
+            <td>Vestido floreado</td>
+            <td>Vestidos</td>
+            <td>$45.000</td>
+            <td>8</td>
+            <td>Publicado</td>
+            <td class="acciones">
+              <a href="producto-form.html?id=1">Editar</a>
+              <a href="#">Eliminar</a>
+            </td>
+          </tr>
+
+          <tr data-id="2">
+            <td><img src="../img/productos/ejemplo.jpg" alt="Campera de jean"></td>
+            <td>Campera de jean</td>
+            <td>Abrigos</td>
+            <td>$62.000</td>
+            <td>0</td>
+            <td>Sin stock</td>
+            <td class="acciones">
+              <a href="producto-form.html?id=2">Editar</a>
+              <a href="#">Eliminar</a>
+            </td>
+          </tr>
+
+          <tr data-id="3">
+            <td><img src="../img/productos/ejemplo.jpg" alt="Collar plateado"></td>
+            <td>Collar plateado</td>
+            <td>Accesorios</td>
+            <td>$12.000</td>
+            <td>15</td>
+            <td>Publicado</td>
+            <td class="acciones">
+              <a href="producto-form.html?id=3">Editar</a>
+              <a href="#">Eliminar</a>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+    
+    <nav class="paginacion">
+      <a href="#">Anterior</a>
+      <a href="#">1</a>
+      <a href="#">2</a>
+      <a href="#">Siguiente</a>
+    </nav>
+
+  </main>
+
+</body>
+</html>
