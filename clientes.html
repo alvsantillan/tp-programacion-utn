@@ -1,120 +1,793 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes | Panel Claudette</title>
-  <link rel="stylesheet" href="../css/estilos.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clientes — Panel de administración</title>
+<style>
+  :root{
+    --bg: #0c0e13;
+    --panel: #14171f;
+    --panel-2: #1a1e29;
+    --border: #262b38;
+    --text: #e9eaf0;
+    --muted: #8b92a5;
+    --accent: #e0a458;
+    --accent-soft: rgba(224,164,88,0.14);
+    --danger: #e0575f;
+    --danger-soft: rgba(224,87,95,0.14);
+    --ok: #6bbf8f;
+    --ok-soft: rgba(107,191,143,0.14);
+    --font-display: 'Sora', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- header ---------- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 22px 32px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--panel) 0%, var(--bg) 100%);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand-mark{
+    width:34px; height:34px;
+    border-radius:8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-weight:700;
+    font-size:14px;
+  }
+  .brand-text h1{
+    font-family: var(--font-display);
+    font-size: 18px;
+    margin:0;
+    letter-spacing: -0.01em;
+  }
+  .brand-text span{
+    font-size:12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+  .topbar-actions{
+    display:flex; gap:10px; align-items:center;
+  }
+
+  /* ---------- layout ---------- */
+  main{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  .page-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .page-head h2{
+    font-family: var(--font-display);
+    font-size: 26px;
+    margin: 0 0 4px 0;
+  }
+  .page-head p{
+    margin:0;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .stitch-divider{
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 20px 0 28px 0;
+  }
+
+  /* ---------- stats ---------- */
+  .stats{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .stat-card{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .stat-card .num{
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .stat-card .label{
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ---------- toolbar ---------- */
+  .toolbar{
+    display:flex;
+    gap: 12px;
+    align-items:center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .search-box{
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+  }
+  .search-box input{
+    width:100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px 10px 34px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: var(--font-body);
+  }
+  .search-box input:focus{
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .search-box::before{
+    content: "";
+    position:absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    width:14px; height:14px;
+    border: 2px solid var(--muted);
+    border-radius:50%;
+  }
+  .search-box::after{
+    content:"";
+    position:absolute;
+    left: 22px; top: 62%;
+    width: 6px; height: 2px;
+    background: var(--muted);
+    transform: rotate(45deg);
+  }
+
+  select, .btn{
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    padding: 10px 14px;
+    cursor: pointer;
+  }
+  select:focus, .btn:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .btn-primary{
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #17130a;
+    font-weight: 600;
+  }
+  .btn-primary:hover{ filter: brightness(1.08); }
+  .btn-ghost:hover{ border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- table ---------- */
+  .table-wrap{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead th{
+    text-align: left;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel-2);
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover{ color: var(--text); }
+  tbody td{
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td{ border-bottom: none; }
+  tbody tr:hover{ background: rgba(255,255,255,0.02); }
+
+  .client-cell{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+  .avatar{
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .client-name{ font-weight: 600; }
+  .client-email{ font-size: 12px; color: var(--muted); }
+
+  .talle-chip{
+    display:inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .badge::before{
+    content:"";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .badge.activo{ background: var(--ok-soft); color: var(--ok); }
+  .badge.activo::before{ background: var(--ok); }
+  .badge.inactivo{ background: var(--danger-soft); color: var(--danger); }
+  .badge.inactivo::before{ background: var(--danger); }
+
+  .row-actions{
+    display:flex; gap: 6px;
+  }
+  .icon-btn{
+    width: 30px; height: 30px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .icon-btn:hover{ border-color: var(--accent); color: var(--accent); }
+  .icon-btn.danger:hover{ border-color: var(--danger); color: var(--danger); }
+
+  .empty-state{
+    text-align:center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty-state .mark{
+    font-family: var(--font-mono);
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .empty-state p{ margin: 6px 0 16px 0; font-size: 13.5px; }
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position: fixed; inset: 0;
+    background: rgba(6,7,10,0.72);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 20px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 480px;
+    padding: 26px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h3{
+    font-family: var(--font-display);
+    margin: 0 0 4px 0;
+    font-size: 18px;
+  }
+  .modal .sub{ color: var(--muted); font-size: 12.5px; margin: 0 0 18px 0; }
+  .field{ margin-bottom: 14px; }
+  .field label{
+    display:block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .field input, .field select{
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: var(--font-body);
+  }
+  .field input:focus, .field select:focus{
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-actions{
+    display:flex; justify-content:flex-end; gap:10px; margin-top: 20px;
+  }
+
+  .toast{
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    transition: transform 0.25s ease;
+    z-index: 60;
+  }
+  .toast.show{ transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 760px){
+    .stats{ grid-template-columns: repeat(2, 1fr); }
+    main{ padding: 20px; }
+    .table-wrap{ overflow-x: auto; }
+    table{ min-width: 720px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .toast{ transition: none; }
+  }
+</style>
 </head>
-<body class="body-admin">
+<body>
 
-  <!-- ===== HEADER ADMIN (igual en todas las paginas del panel) ===== -->
-  <header class="header-admin">
-    <span class="logo-admin">Claudette</span>
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">C</div>
+    <div class="brand-text">
+      <h1>tienda-claudia</h1>
+      <span>/admin/clientes.html</span>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <a href="productos.html" class="btn btn-ghost">Productos</a>
+    <a href="login.html" class="btn btn-ghost">Salir</a>
+  </div>
+</div>
 
-    <nav class="nav-admin">
-      <ul>
-        <li><a href="productos.html">Productos</a></li>
-        <li><a href="clientes.html">Clientes</a></li>
-        <li><a href="login.html">Cerrar sesion</a></li>
-      </ul>
-    </nav>
-  </header>
+<main>
+  <div class="page-head">
+    <div>
+      <h2>Clientes</h2>
+      <p>Listado de personas registradas en la tienda.</p>
+    </div>
+    <button class="btn btn-primary" id="btnNuevo">+ Agregar cliente</button>
+  </div>
 
-  <!-- ===== CONTENIDO ===== -->
-  <main class="main-admin">
+  <hr class="stitch-divider">
 
-    <section class="admin-encabezado">
-      <h1>Clientes</h1>
-    </section>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="num" id="statTotal">0</div>
+      <div class="label">Clientes totales</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="statActivos">0</div>
+      <div class="label">Activos</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="statPedidos">0</div>
+      <div class="label">Pedidos acumulados</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="statGastado">$0</div>
+      <div class="label">Total gastado</div>
+    </div>
+  </div>
 
-    <!-- Buscador -->
-    <section class="admin-filtros">
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" id="buscador" placeholder="Buscar por nombre, email o teléfono...">
+    </div>
+    <select id="filtroEstado">
+      <option value="todos">Todos los estados</option>
+      <option value="activo">Activos</option>
+      <option value="inactivo">Inactivos</option>
+    </select>
+    <select id="filtroOrden">
+      <option value="reciente">Más recientes</option>
+      <option value="nombre">Nombre A-Z</option>
+      <option value="gastado">Mayor gastado</option>
+      <option value="pedidos">Más pedidos</option>
+    </select>
+  </div>
 
-      <form class="formulario-filtros" action="#" method="get">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Contacto</th>
+          <th>Talle</th>
+          <th>Pedidos</th>
+          <th>Gastado</th>
+          <th>Estado</th>
+          <th>Alta</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tablaBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="mark">···</div>
+      <p>No hay clientes que coincidan con la búsqueda.</p>
+      <button class="btn btn-ghost" id="btnLimpiarFiltros">Limpiar filtros</button>
+    </div>
+  </div>
+</main>
 
-        <div class="campo">
-          <label for="buscar">Buscar</label>
-          <input type="search" id="buscar" name="buscar" placeholder="Nombre, email o telefono">
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitulo">Agregar cliente</h3>
+    <p class="sub">Completá los datos del cliente.</p>
+    <form id="formCliente">
+      <input type="hidden" id="clienteId">
+      <div class="field">
+        <label for="nombre">Nombre y apellido</label>
+        <input type="text" id="nombre" required placeholder="Ej: Martina Gómez">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="nombre@correo.com">
         </div>
+        <div class="field">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" required placeholder="+54 9 381 ...">
+        </div>
+      </div>
+      <div class="field">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" placeholder="Calle, número, ciudad">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="talle">Talle preferido</label>
+          <select id="talle">
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M" selected>M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="estado">Estado</label>
+          <select id="estado">
+            <option value="activo" selected>Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pedidos">Pedidos realizados</label>
+          <input type="number" id="pedidos" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="gastado">Total gastado ($)</label>
+          <input type="number" id="gastado" min="0" value="0">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="btnCancelar">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar cliente</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-        <button class="boton-secundario" type="submit">Buscar</button>
+<div class="toast" id="toast"></div>
 
-      </form>
+<script>
+(function(){
+  const STORAGE_KEY = 'tienda-claudia-clientes';
 
-    </section>
+  const seed = [
+    { id: 'c1', nombre: 'Martina Gómez', email: 'martina.gomez@mail.com', telefono: '+54 9 381 555-1234', direccion: 'San Martín 450, Tucumán', talle: 'M', estado: 'activo', pedidos: 7, gastado: 84500, alta: '2025-11-02' },
+    { id: 'c2', nombre: 'Lucas Ferreyra', email: 'lucas.ferreyra@mail.com', telefono: '+54 9 381 555-8821', direccion: 'Av. Aconquija 1200, Yerba Buena', talle: 'L', estado: 'activo', pedidos: 3, gastado: 32900, alta: '2026-01-18' },
+    { id: 'c3', nombre: 'Sofía Paz', email: 'sofia.paz@mail.com', telefono: '+54 9 381 555-4410', direccion: 'Congreso 88, San Miguel de Tucumán', talle: 'S', estado: 'inactivo', pedidos: 1, gastado: 11200, alta: '2025-06-30' },
+    { id: 'c4', nombre: 'Bruno Acosta', email: 'bruno.acosta@mail.com', telefono: '+54 9 381 555-7765', direccion: 'Mendoza 210, Tafí Viejo', talle: 'XL', estado: 'activo', pedidos: 12, gastado: 156300, alta: '2025-03-11' },
+    { id: 'c5', nombre: 'Camila Ríos', email: 'camila.rios@mail.com', telefono: '+54 9 381 555-2290', direccion: 'Sarmiento 76, Tucumán', talle: 'M', estado: 'activo', pedidos: 5, gastado: 47800, alta: '2026-02-25' }
+  ];
 
-    
-    <section class="admin-tabla">
+  function cargarClientes(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
+        return seed.slice();
+      }
+      return JSON.parse(raw);
+    }catch(e){
+      return seed.slice();
+    }
+  }
 
-      <table class="tabla-clientes">
+  function guardarClientes(lista){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+  }
 
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Telefono</th>
-            <th>Localidad</th>
-            <th>Compras</th>
-            <th>Ultima compra</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
+  let clientes = cargarClientes();
+  let ordenActual = 'reciente';
 
-        <tbody>
+  const tablaBody = document.getElementById('tablaBody');
+  const emptyState = document.getElementById('emptyState');
+  const buscador = document.getElementById('buscador');
+  const filtroEstado = document.getElementById('filtroEstado');
+  const filtroOrden = document.getElementById('filtroOrden');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const formCliente = document.getElementById('formCliente');
+  const modalTitulo = document.getElementById('modalTitulo');
+  const toast = document.getElementById('toast');
 
-          
-          <tr data-id="1">
-            <td>Maria Gomez</td>
-            <td>maria@ejemplo.com</td>
-            <td>381 555-0001</td>
-            <td>San Miguel de Tucuman</td>
-            <td>3</td>
-            <td>12/08/2026</td>
-            <td class="acciones">
-              <a href="#">Ver detalle</a>
-            </td>
-          </tr>
+  function iniciales(nombre){
+    return nombre.split(' ').filter(Boolean).slice(0,2).map(p => p[0].toUpperCase()).join('');
+  }
 
-          <tr data-id="2">
-            <td>Lucia Fernandez</td>
-            <td>lucia@ejemplo.com</td>
-            <td>381 555-0002</td>
-            <td>Yerba Buena</td>
-            <td>1</td>
-            <td>05/08/2026</td>
-            <td class="acciones">
-              <a href="#">Ver detalle</a>
-            </td>
-          </tr>
+  function formatoMoneda(n){
+    return '$' + Number(n).toLocaleString('es-AR');
+  }
 
-          <tr data-id="3">
-            <td>Sofia Diaz</td>
-            <td>sofia@ejemplo.com</td>
-            <td>381 555-0003</td>
-            <td>Tafi Viejo</td>
-            <td>7</td>
-            <td>18/08/2026</td>
-            <td class="acciones">
-              <a href="#">Ver detalle</a>
-            </td>
-          </tr>
+  function formatoFecha(f){
+    const d = new Date(f + 'T00:00:00');
+    return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
 
-        </tbody>
+  function mostrarToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
 
-      </table>
+  function actualizarStats(lista){
+    document.getElementById('statTotal').textContent = clientes.length;
+    document.getElementById('statActivos').textContent = clientes.filter(c => c.estado === 'activo').length;
+    document.getElementById('statPedidos').textContent = clientes.reduce((a,c) => a + Number(c.pedidos), 0);
+    document.getElementById('statGastado').textContent = formatoMoneda(clientes.reduce((a,c) => a + Number(c.gastado), 0));
+  }
 
-    </section>
+  function aplicarFiltros(){
+    const texto = buscador.value.trim().toLowerCase();
+    const estado = filtroEstado.value;
 
-    
-    <nav class="paginacion">
-      <a href="#">Anterior</a>
-      <a href="#">1</a>
-      <a href="#">2</a>
-      <a href="#">Siguiente</a>
-    </nav>
+    let filtrados = clientes.filter(c => {
+      const coincideTexto = !texto ||
+        c.nombre.toLowerCase().includes(texto) ||
+        c.email.toLowerCase().includes(texto) ||
+        c.telefono.toLowerCase().includes(texto);
+      const coincideEstado = estado === 'todos' || c.estado === estado;
+      return coincideTexto && coincideEstado;
+    });
 
-  </main>
+    switch(ordenActual){
+      case 'nombre':
+        filtrados.sort((a,b) => a.nombre.localeCompare(b.nombre));
+        break;
+      case 'gastado':
+        filtrados.sort((a,b) => b.gastado - a.gastado);
+        break;
+      case 'pedidos':
+        filtrados.sort((a,b) => b.pedidos - a.pedidos);
+        break;
+      default:
+        filtrados.sort((a,b) => new Date(b.alta) - new Date(a.alta));
+    }
+
+    return filtrados;
+  }
+
+  function renderTabla(){
+    const filtrados = aplicarFiltros();
+    tablaBody.innerHTML = '';
+
+    if(filtrados.length === 0){
+      emptyState.style.display = 'block';
+    } else {
+      emptyState.style.display = 'none';
+    }
+
+    filtrados.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div class="client-cell">
+            <div class="avatar">${iniciales(c.nombre)}</div>
+            <div>
+              <div class="client-name">${escapeHtml(c.nombre)}</div>
+              <div class="client-email">${escapeHtml(c.email)}</div>
+            </div>
+          </div>
+        </td>
+        <td>${escapeHtml(c.telefono)}</td>
+        <td><span class="talle-chip">${escapeHtml(c.talle)}</span></td>
+        <td>${c.pedidos}</td>
+        <td>${formatoMoneda(c.gastado)}</td>
+        <td><span class="badge ${c.estado}">${c.estado === 'activo' ? 'Activo' : 'Inactivo'}</span></td>
+        <td>${formatoFecha(c.alta)}</td>
+        <td>
+          <div class="row-actions">
+            <button class="icon-btn" title="Editar" data-editar="${c.id}">✎</button>
+            <button class="icon-btn danger" title="Eliminar" data-eliminar="${c.id}">✕</button>
+          </div>
+        </td>
+      `;
+      tablaBody.appendChild(tr);
+    });
+
+    actualizarStats();
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function abrirModal(cliente){
+    formCliente.reset();
+    if(cliente){
+      modalTitulo.textContent = 'Editar cliente';
+      document.getElementById('clienteId').value = cliente.id;
+      document.getElementById('nombre').value = cliente.nombre;
+      document.getElementById('email').value = cliente.email;
+      document.getElementById('telefono').value = cliente.telefono;
+      document.getElementById('direccion').value = cliente.direccion;
+      document.getElementById('talle').value = cliente.talle;
+      document.getElementById('estado').value = cliente.estado;
+      document.getElementById('pedidos').value = cliente.pedidos;
+      document.getElementById('gastado').value = cliente.gastado;
+    } else {
+      modalTitulo.textContent = 'Agregar cliente';
+      document.getElementById('clienteId').value = '';
+    }
+    modalOverlay.classList.add('open');
+    document.getElementById('nombre').focus();
+  }
+
+  function cerrarModal(){
+    modalOverlay.classList.remove('open');
+  }
+
+  document.getElementById('btnNuevo').addEventListener('click', () => abrirModal(null));
+  document.getElementById('btnCancelar').addEventListener('click', cerrarModal);
+  modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) cerrarModal(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') cerrarModal(); });
+
+  formCliente.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const id = document.getElementById('clienteId').value;
+    const datos = {
+      nombre: document.getElementById('nombre').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      telefono: document.getElementById('telefono').value.trim(),
+      direccion: document.getElementById('direccion').value.trim(),
+      talle: document.getElementById('talle').value,
+      estado: document.getElementById('estado').value,
+      pedidos: Number(document.getElementById('pedidos').value) || 0,
+      gastado: Number(document.getElementById('gastado').value) || 0
+    };
+
+    if(id){
+      const idx = clientes.findIndex(c => c.id === id);
+      if(idx > -1){
+        clientes[idx] = { ...clientes[idx], ...datos };
+        mostrarToast('Cliente actualizado');
+      }
+    } else {
+      datos.id = 'c' + Date.now();
+      datos.alta = new Date().toISOString().slice(0,10);
+      clientes.push(datos);
+      mostrarToast('Cliente agregado');
+    }
+
+    guardarClientes(clientes);
+    cerrarModal();
+    renderTabla();
+  });
+
+  tablaBody.addEventListener('click', (e) => {
+    const editarId = e.target.getAttribute('data-editar');
+    const eliminarId = e.target.getAttribute('data-eliminar');
+
+    if(editarId){
+      const cliente = clientes.find(c => c.id === editarId);
+      if(cliente) abrirModal(cliente);
+    }
+
+    if(eliminarId){
+      const cliente = clientes.find(c => c.id === eliminarId);
+      if(cliente && confirm(`¿Eliminar a ${cliente.nombre}?`)){
+        clientes = clientes.filter(c => c.id !== eliminarId);
+        guardarClientes(clientes);
+        mostrarToast('Cliente eliminado');
+        renderTabla();
+      }
+    }
+  });
+
+  document.getElementById('btnLimpiarFiltros').addEventListener('click', () => {
+    buscador.value = '';
+    filtroEstado.value = 'todos';
+    filtroOrden.value = 'reciente';
+    ordenActual = 'reciente';
+    renderTabla();
+  });
+
+  buscador.addEventListener('input', renderTabla);
+  filtroEstado.addEventListener('change', renderTabla);
+  filtroOrden.addEventListener('change', (e) => {
+    ordenActual = e.target.value;
+    renderTabla();
+  });
+
+  renderTabla();
+})();
+</script>
 
 </body>
 </html>
